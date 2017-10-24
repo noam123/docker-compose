@@ -31,7 +31,11 @@ const defaultOptions: ServiceOptions = {
   forceRecreate: true,
   timeStamps: false,
   composePath: '',
-  workingDirectory: ''
+  workingDirectory: '',
+  timeout: '',
+  build: '',
+  removeOrphans: '',
+  noColor: ''
 }
 
 /*
@@ -152,9 +156,13 @@ export class DockerCompose {
   }
 
   async _upService(serviceName: string, options: ?ServiceOptions): Promise<STDResponse> {
-    const { forceRecreate, timeStamps } = { ...this.options, ...options }
+    const { forceRecreate, timeStamps, timeout, build, removeOrphans, noColor } = { ...this.options, ...options }
     const flags = [
       forceRecreate ? '--force-recreate ' : '',
+      timeout ? `--timeout ${timeout} ` : '',
+      build ? '--build ' : '',
+      removeOrphans ? '--remove-orphans ' : '',
+      noColor ? '--no-color ' : '',
       '-d ',
     ].join('').trim()
     return await this._execDockerComposeCommand(`up ${flags} ${serviceName}`, options)
