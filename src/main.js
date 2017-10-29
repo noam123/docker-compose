@@ -172,7 +172,8 @@ export class DockerCompose {
     const { composePath, workingDirectory } = { ...this.options, ...options }
     return new Promise((resolve, reject) => {
       exec(`docker-compose -f ${composePath} ${command}`, {
-        cwd: workingDirectory
+        cwd: workingDirectory,
+        maxBuffer: 1024 * 500
       }, (err, stdout, stderr) => {
         if (err) return reject(err)
         return resolve({
